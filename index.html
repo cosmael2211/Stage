@@ -70,6 +70,7 @@ dialog::backdrop{background:#000a}
 <div class="row" style="margin-top:10px">
 <button class="g" onclick="document.getElementById('dlg').showModal()">⬇ Importer depuis Google Doc</button>
 <button class="g" onclick="exportCsv()">Exporter en CSV</button>
+<button class="g" onclick="resetAll()" style="color:#f55b6b;border-color:#5a2a33">🗑 Tout réinitialiser</button>
 </div>
 </div>
 
@@ -142,6 +143,11 @@ function del(id){if(confirm('Supprimer cette entreprise ?')){data=data.filter(x=
 function exportCsv(){const rows=[['Entreprise','Contact','Coordonnées','Ville','Statut','Notes','Date']].concat(data.map(d=>[d.n,d.c,d.m,d.v,ST.find(s=>s[0]===d.s)[1],d.note,d.d]));
 const csv=rows.map(r=>r.map(x=>'"'+String(x||'').replace(/"/g,'""')+'"').join(';')).join('\n');
 const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv'}));a.download='stages.csv';a.click()}
+
+function resetAll(){
+if(!data.length){alert('Il n’y a rien à effacer.');return}
+if(confirm('Effacer les '+data.length+' entreprises ? Cette action est définitive. Pense à exporter en CSV avant.')){
+data=[];flt='all';$('q').value='';save();render()}}
 
 function render(){
 const cnt=k=>data.filter(d=>d.s===k).length;
